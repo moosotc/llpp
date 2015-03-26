@@ -4,7 +4,7 @@ to be built and installed to use llpp.
 MuPDF is included as a git submodule, which needs to be initialized
 before building llpp. This is done with the following two commands
   git submodule init
-  git submodule update
+  git submodule update --recursive
 
 After that, change into the MuPDF directory and build it:
   cd mupdf
