@@ -19,8 +19,6 @@ EOF
     exit $2
 }
 
-mudir="$1"
-
 while getopts nFb:O opt; do
     case $opt in
         F) fontconfig=true; cflags="$cflags -DUSE_FONTCONFIG";;
@@ -30,6 +28,9 @@ while getopts nFb:O opt; do
         ?) usage "" 0;;
     esac
 done
+shift $((OPTIND-1))
+
+mudir="$1"
 
 pkgs="openssl"
 test $fontconfig && pkgs="$pkgs fontconfig" || true
