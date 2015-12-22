@@ -7,7 +7,7 @@ else
     builddir="$1"
 fi
 
-ccopt='-Wno-pointer-sign -O2'
+ccopt="$CFLAGS -Wno-pointer-sign -O2"
 mlopt='-warn-error +a -w +a -g -safe-string'
 if test -z "$native"; then
     comp=ocamlc.opt
