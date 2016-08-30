@@ -78,7 +78,7 @@ and interpagespace = int
 and multicolumns   = multicol * pagegeom
 and singlecolumn   = pagegeom
 and splitcolumns   = columncount * pagegeom
-and pagegeom       = (pdimno * x * y * (pageno * width * height * leftx)) array
+and pagegeom       = (pdimno * int * int * (pageno * width * height * leftx)) array
 and multicol       = columncount * covercount * covercount
 and pdimno         = int
 and columncount    = int
@@ -112,11 +112,11 @@ and haspbo         = bool
 and usefontconfig  = bool
 and uri            = string
 and caption        = string
-and x              = int
-and y              = int
+and x              = float
+and y              = float
 and tilex          = int
 and tiley          = int
-and tileparams     = (x * y * width * height * tilex * tiley)
+and tileparams     = (int * int * width * height * tilex * tiley)
 and under =
     | Unone
     | Ulinkuri of string
@@ -391,7 +391,7 @@ type state =
     ; mutable y             : y
     ; mutable anchor        : anchor
     ; mutable ranchors      : (string * string * anchor * string) list
-    ; mutable maxy          : int
+    ; mutable maxy          : y
     ; mutable layout        : page list
     ; pagemap               : (pagemapkey, opaque) Hashtbl.t
     ; tilemap               : (tilemapkey, tile) Hashtbl.t
@@ -416,7 +416,7 @@ type state =
     ; mutable geomcmds      : (string * ((string * (unit -> unit)) list))
     ; mutable memused       : memsize
     ; mutable gen           : gen
-    ; mutable throttle      : (page list * int * float) option
+    ; mutable throttle      : (page list * float * float) option
     ; mutable autoscroll    : int option
     ; mutable ghyll         : (int option -> unit)
     ; mutable help          : helpitem array
@@ -657,13 +657,13 @@ let state =
   ; stderr        = Unix.stderr
   ; errmsgs       = Buffer.create 0
   ; newerrmsgs    = false
-  ; x             = 0
-  ; y             = 0
+  ; x             = 0.0
+  ; y             = 0.0
   ; w             = 0
   ; anchor        = emptyanchor
   ; ranchors      = []
   ; layout        = []
-  ; maxy          = max_int
+  ; maxy          = max_float
   ; tilelru       = Queue.create ()
   ; pagemap       = Hashtbl.create 10
   ; tilemap       = Hashtbl.create 10
@@ -760,19 +760,20 @@ let page_of_y y =
       else
         let n = (nmax + nmin) / 2 in
         let vy, h = rowyh cl b n in
+        let vy = float vy in
         let y0, y1 =
           if conf.presentation
           then
             let ips = calcips h in
-            let y0 = vy - ips in
-            let y1 = vy + h + ips in
+            let y0 = vy -. float ips in
+            let y1 = vy +. float (h + ips) in
             y0, y1
           else (
             if n = 0
-            then 0, vy + h + conf.interpagespace
+            then 0.0, vy +. float (h + conf.interpagespace)
             else
-              let y0 = vy - conf.interpagespace in
-              y0, y0 + h + conf.interpagespace
+              let y0 = vy -. float conf.interpagespace in
+              y0, y0 +. float (h + conf.interpagespace)
           )
         in
         if y >= y0 && y < y1
@@ -803,20 +804,20 @@ let calcheight () =
       if Array.length b > 0
       then
         let y, h = rowyh cl b (Array.length b - 1) in
-        y + h + (if conf.presentation then calcips h else 0)
-      else 0
+        float (y + h + (if conf.presentation then calcips h else 0))
+      else 0.0
   | Csingle b ->
       if Array.length b > 0
       then
         let (_, _, y, (_, _, h, _)) = b.(Array.length b - 1) in
-        y + h + (if conf.presentation then calcips h else 0)
-      else 0
+        float (y + h + (if conf.presentation then calcips h else 0))
+      else 0.0
   | Csplit (_, b) ->
       if Array.length b > 0
       then
         let (_, _, y, (_, _, h, _)) = b.(Array.length b - 1) in
-        y + h
-      else 0
+        float (y + h)
+      else 0.0
 ;;
 
 let getpageywh pageno =
@@ -824,34 +825,36 @@ let getpageywh pageno =
   match conf.columns with
   | Csingle b ->
       if Array.length b = 0
-      then 0, 0, 0
+      then 0.0, 0, 0
       else
         let (_, _, y, (_, w, h, _)) = b.(pageno) in
         let y =
-          if conf.presentation
-          then y - calcips h
-          else y
+          float @@
+            if conf.presentation
+            then y - calcips h
+            else y
         in
         y, w, h
   | Cmulti (cl, b) ->
       if Array.length b = 0
-      then 0, 0, 0
+      then 0.0, 0, 0
       else
         let y, h = rowyh cl b pageno in
         let (_, _, _, (_, w, _, _)) = b.(pageno) in
         let y =
-          if conf.presentation
-          then y - calcips h
-          else y
+          float @@
+            if conf.presentation
+            then y - calcips h
+            else y
         in
         y, w, h
   | Csplit (c, b) ->
       if Array.length b = 0
-      then 0, 0, 0
+      then 0.0, 0, 0
       else
         let n = pageno*c in
         let (_, _, y, (_, w, h, _)) = b.(n) in
-        y, w / c, h
+        float y, w / c, h
 ;;
 
 let getpageyh pageno =
@@ -915,14 +918,14 @@ let getanchor () =
       then state.anchor
       else
         let y, h = getpageyh n in
-        let dy = y - state.y in
+        let dy = y -. state.y in
         let dtop =
           if conf.presentation
           then
             let ips = calcips h in
-            float (dy + ips) /. float ips
+            (dy +. float ips) /. float ips
           else
-            float dy /. float conf.interpagespace
+            dy /. float conf.interpagespace
         in
         (n, 0.0, dtop)
 ;;
@@ -1492,7 +1495,7 @@ let load openlast =
     setconf defconf dc;
     setconf conf pc;
     state.bookmarks <- pb;
-    state.x <- px;
+    state.x <- float px;
     state.origin <- po;
     if conf.jumpback
     then state.anchor <- pa;
@@ -1505,7 +1508,7 @@ let load openlast =
 let gethist () =
   let f (h, _) =
     Hashtbl.fold (fun path (pc, pb, px, pa, po) accu ->
-      (path, pc, pb, px, pa, po) :: accu)
+      (path, pc, pb, float px, pa, po) :: accu)
       h [];
   in
   load2 f []
@@ -1851,9 +1854,9 @@ let save1 bb leavebirdseye x h dc =
 ;;
 
 let save leavebirdseye =
-  let relx = float state.x /. float state.winw in
+  let relx = state.x /. float state.winw in
   let w, h, x =
-    let cx w = truncate (relx *. float w) in
+    let cx w = relx *. float w in
     List.fold_left
       (fun (w, h, x) ws ->
         match ws with
@@ -1867,7 +1870,7 @@ let save leavebirdseye =
   conf.cwinh <- h;
   let bb = Buffer.create 32768 in
   let save2 (h, dc) =
-    save1 bb leavebirdseye x h dc
+    save1 bb leavebirdseye (truncate x) h dc
   in
   if load1 save2 && Buffer.length bb > 0
   then
