@@ -43,7 +43,7 @@ let ghyllscroll_of_string s =
 ;;
 
 let ghyllscroll_to_string ((n, a, b) as nab) =
-  (**) if nab = fastghyllscroll then "fast"
+  if nab = fastghyllscroll then "fast"
   else if nab = neatghyllscroll then "neat"
   else Printf.sprintf "%d,%d,%d" n a b;
 ;;
