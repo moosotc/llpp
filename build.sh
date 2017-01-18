@@ -1,5 +1,5 @@
 #!/bin/sh
-macos=`[ $(uname -s) == "Darwin" ] && echo 1 || echo 0`
+macos=$(test $(uname -s) = "Darwin" && echo 1 || echo 0)
 set -e
 if test x"$1" = x; then
     printf "No build directory specified\n" 1>&2
