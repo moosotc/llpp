@@ -193,3 +193,10 @@ isfresh "$outd/llpp" "$cmd$(eval $keycmd)" || {
         eval $cmd || echo "$cmd failed"
         echo "k='$cmd$(eval $keycmd)'" >$outd/llpp.past
     }
+
+if $darwin; then
+    shortver=$(echo $ver | sed -n 's/v\([0-9]*\).*/\1/p')
+    mkdir -p $outd/llpp.app/Contents/MacOS
+    cat misc/Info.plist | sed s/@VERSION@/$shortver/ | sed s/@BUNDLE_VERSION@/$ver/ > $outd/llpp.app/Contents/Info.plist
+    cp $outd/llpp $outd/llpp.app/Contents/MacOS/
+fi
