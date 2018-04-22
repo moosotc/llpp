@@ -3,8 +3,8 @@
 # to the pdfviewer llpp via inotify.
 
 # Prepare parameters.
-cd `dirname $1`
-pdf=`basename $1`
+cd "$(dirname "$1")"
+pdf=$(basename "$1")
 shift
 passthrough="$@"
 
