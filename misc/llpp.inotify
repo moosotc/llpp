@@ -25,7 +25,7 @@ trap "kill ${pid_llpp}" SIGINT SIGTERM SIGQUIT SIGKILL
 
 # Watch for changes in the directory of the given file. This is necessary
 # to recieve events after the file was deleted.
-inotifywait -m -e close_write "$PWD" -q | while read dir ev file; do
+inotifywait -m -e close_write "$PWD" -q --format "%f"| while read file; do
     # Only refresh on events of the file in question and if this file exists.
     if [ "$file" = "$pdf" ] && [ -e "$pdf" ]; then
         kill -HUP $pid_llpp
