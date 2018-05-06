@@ -26,6 +26,11 @@ cat <<EOF
 			</array>
 		</dict>
 	</array>
+        <key>LSEnvironment</key>
+        <dict>
+                <key>LC_CTYPE</key>
+                <string>en_US.UTF-8</string>
+        </dict>
 	<key>CFBundleExecutable</key>
 	<string>llpp</string>
 	<key>CFBundleIdentifier</key>
