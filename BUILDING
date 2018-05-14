@@ -7,6 +7,10 @@ Prerequisites for building from sources:
            If not present will be downloaded from the network and
            built/used locally without system-wide installation.
 
+  llpp% bash deps.sh && bash build.bash build
+
+  Or if you like to do things manually:
+
   llpp% git clone https://github.com/ArtifexSoftware/mupdf --recursive
   llpp% cd mupdf
   mupdf% git checkout bd88b96f7b7b21d64d4fb32a2674653a08f8cb38
