@@ -359,8 +359,6 @@ NSCursor *GetCursor (int idx)
 
 @implementation MyView
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"
 - (instancetype)initWithFrame:(NSRect)frame connector:(Connector *)aConnector
 {
   self = [super initWithFrame:frame];
@@ -368,11 +366,10 @@ NSCursor *GetCursor (int idx)
   if (self != NULL) {
     connector = aConnector;
     cursor = [NSCursor arrowCursor];
-    self.acceptsTouchEvents = YES;
+    self.allowedTouchTypes = NSTouchTypeMaskDirect | NSTouchTypeMaskIndirect;
   }
 
   return self;
-#pragma GCC diagnostic pop
 }
 
 - (void)setCursor:(NSCursor *)aCursor
