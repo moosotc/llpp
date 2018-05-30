@@ -765,14 +765,12 @@ NSCursor *GetCursor (int idx)
   return YES;
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"
 - (void)openDocument:(id)sender
 {
   NSOpenPanel *openPanel = [NSOpenPanel openPanel];
   [openPanel beginSheetModalForWindow:window
                     completionHandler:^(NSInteger result){
-      if (result == NSFileHandlingPanelOKButton) {
+      if (result == NSModalResponseOK) {
          NSString *filename = [[[openPanel URLs] objectAtIndex:0] path];
          if (filename != nil) {
            [self application:NSApp openFile:filename];
@@ -780,7 +778,6 @@ NSCursor *GetCursor (int idx)
       }
     }];
 }
-#pragma GCC diagnostic pop
 
 - (void)reportIssue:(id)sender
 {
