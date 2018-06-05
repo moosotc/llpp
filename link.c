@@ -3437,9 +3437,9 @@ CAMLprim value ml_keysymtoutf8 (value keysym_v)
 {
     CAMLparam1 (keysym_v);
     CAMLlocal1 (str_v);
-    KeySym keysym = Int_val (keysym_v);
+    uint32_t keysym = Int_val (keysym_v);
     Rune rune;
-    extern long keysym2ucs (KeySym);
+    extern long keysym2ucs (uint32_t);
     int len;
     char buf[5];
 

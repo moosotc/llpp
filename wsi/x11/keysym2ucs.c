@@ -37,6 +37,8 @@
  * AUTOMATICALLY GENERATED FILE, DO NOT EDIT !!! (unicode/convmap.pl)
  */
 
+#include <inttypes.h>
+
 struct codepair {
   unsigned short keysym;
   unsigned short ucs;
@@ -816,7 +818,7 @@ struct codepair {
   { 0x20ac, 0x20ac }, /*                    EuroSign € EURO SIGN */
 };
 
-long keysym2ucs(KeySym keysym)
+long keysym2ucs(uint32_t keysym)
 {
     int min = 0;
     int max = sizeof(keysymtab) / sizeof(struct codepair) - 1;
