@@ -122,7 +122,7 @@ _listview_, _outline_, and _view_.
 llppac(1), llpphtml(1)
 
 == ENVIRONMENT
-=== LLPP_ASK_PASS
+=== LLPP_ASKPASS
 Command to inquire user about the password (dmenu/rofi like)
 
 == REPORTING BUGS
