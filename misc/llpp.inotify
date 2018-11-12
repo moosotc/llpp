@@ -9,13 +9,13 @@ shift
 passthrough="$@"
 
 # Return with an error if the given file does not exist.
-if [ ! -e $pdf ]; then
+if [ ! -e "$pdf" ]; then
     echo "$pdf: No such file or directory"
     exit 1
 fi
 
 # Start llpp with the given file.
-llpp $pdf $passthrough &
+llpp "$pdf" $passthrough &
 
 # Track the PID of the llpp instance.
 pid_llpp=$!
