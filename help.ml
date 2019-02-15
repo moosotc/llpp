@@ -100,8 +100,6 @@ S                   - slide show mode
 
 -----Tunables-----
 -i          - toggle case sensitivity of searches
--s<number>  - set scroll step (pixels)
--S<number>  - set space between pages (pixels)
 -R<number>  - rotate
 -v          - toggle verbosity
 -Z<number>  - set zoom (percent)
