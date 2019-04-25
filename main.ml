@@ -1380,9 +1380,7 @@ let act cmds =
                sub 10 2 ':';
                sub 12 2 ':';
                sub 14 2 ' ';
-               Buffer.add_char b '[';
-               Buffer.add_string b v;
-               Buffer.add_char b ']';
+               Printf.bprintf b  "[%s]" v;
                Buffer.contents b
              else args
            )
