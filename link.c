@@ -165,6 +165,7 @@ static struct {
     GLenum texty;
 
     fz_colorspace *colorspace;
+    float papercolor[4];
 
     struct {
         int w, h;
@@ -614,7 +615,10 @@ static struct tile *rendertile (struct page *page, int x, int y, int w, int h,
 
     tile->w = w;
     tile->h = h;
-    fz_clear_pixmap_with_value (state.ctx, tile->pixmap, 0xff);
+    fz_fill_pixmap_with_color (state.ctx, tile->pixmap,
+                               fz_device_rgb(state.ctx),
+                               state.papercolor,
+                               fz_default_color_params(state.ctx));
 
     dev = fz_new_draw_device (state.ctx, fz_identity, tile->pixmap);
     ctm = pagectm (page);
@@ -3320,6 +3324,18 @@ void ml_setaalevel (value level_v)
     CAMLparam1 (level_v);
 
     state.aalevel = Int_val (level_v);
+    CAMLreturn0;
+}
+
+void ml_setpapercolor (value rgba_v);
+void ml_setpapercolor (value rgba_v)
+{
+    CAMLparam1 (rgba_v);
+
+    state.papercolor[0] = Double_val (Field (rgba_v, 0));
+    state.papercolor[1] = Double_val (Field (rgba_v, 1));
+    state.papercolor[2] = Double_val (Field (rgba_v, 2));
+    state.papercolor[3] = Double_val (Field (rgba_v, 3));
     CAMLreturn0;
 }
 

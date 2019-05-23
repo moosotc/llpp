@@ -745,6 +745,7 @@ let config_of c attrs =
       | "slice-height" -> { c with sliceheight = maxv 2 v }
       | "thumbnail-width" -> { c with thumbw = maxv 2 v }
       | "background-color" -> { c with bgcolor = color_of_string v }
+      | "paper-color" -> { c with papercolor = rgba_of_string v }
       | "scrollbar-color" -> { c with sbarcolor = rgba_of_string v }
       | "scrollbar-handle-color" -> { c with sbarhndlcolor = rgba_of_string v }
       | "texture-color" -> { c with texturecolor = rgba_of_string v }
@@ -1237,6 +1238,7 @@ let add_attrs bb always dc c time =
   oi "slice-height" c.sliceheight dc.sliceheight;
   oi "thumbnail-width" c.thumbw dc.thumbw;
   oc "background-color" c.bgcolor dc.bgcolor;
+  oA "paper-color" c.papercolor dc.papercolor;
   oA "scrollbar-color" c.sbarcolor dc.sbarcolor;
   oA "scrollbar-handle-color" c.sbarhndlcolor dc.sbarhndlcolor;
   oA "texture-color" c.texturecolor dc.texturecolor;

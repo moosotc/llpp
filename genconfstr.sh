@@ -90,6 +90,7 @@ g texcount texcount 256
 g sliceheight sliceheight 24
 g thumbw width 76
 g bgcolor rgb "(0.5, 0.5, 0.5)"
+g papercolor rgba "(1.0, 1.0, 1.0, 0.0)"
 g sbarcolor rgba "(0.64, 0.64, 0.64, 0.7)"
 g sbarhndlcolor rgba "(0.0, 0.0, 0.0, 0.7)"
 g texturecolor rgba "(0.0, 0.0, 0.0, 0.0)"

@@ -17,6 +17,7 @@ external postprocess :
   = "ml_postprocess";;
 external pagebbox : opaque -> bbox = "ml_getpagebox";;
 external setaalevel : int -> unit = "ml_setaalevel";;
+external setpapercolor : (float * float * float * float) -> unit = "ml_setpapercolor";;
 external realloctexts : int -> bool = "ml_realloctexts";;
 external findlink : opaque -> linkdir -> link = "ml_findlink";;
 external getlink : opaque -> int -> under = "ml_getlink";;
