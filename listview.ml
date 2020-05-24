@@ -109,7 +109,7 @@ let enttext () =
     then (
       if not (istextentry state.mode) && state.uioh#eformsgs
       then
-        let s1 = "(press 'e' to review error messasges)" in
+        let s1 = "(press 'e' to review error messages)" in
         if nonemptystr s then s ^ " " ^ s1 else s1
       else s
     )
