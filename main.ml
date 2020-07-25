@@ -698,12 +698,11 @@ let getanchory (n, top, dtop) =
   else y + truncate (top*.float h -. dtop*.float conf.interpagespace)
 ;;
 
-let addnav () = getanchor () |> cbput state.hists.nav;;
-let addnavnorc () = getanchor () |> cbput_dont_update_rc state.hists.nav;;
-
-let getnav dir =
-  let anchor = cbgetc state.hists.nav dir in
-  getanchory anchor;
+let addnav () =
+  state.nav <-
+    { past = getanchor () :: state.nav.past
+    ; future = []
+    }
 ;;
 
 let gotopage n top =
@@ -3452,10 +3451,6 @@ let viewkeyboard key mask =
         end;
      end;
 
-  | Backspace ->
-     addnavnorc ();
-     gotoxy state.x (getnav ~-1)
-
   | Ascii 'o' -> enteroutlinemode ()
   | Ascii 'H' -> enterhistmode ()
 
@@ -3790,11 +3785,27 @@ let viewkeyboard key mask =
      gotoxy 0 (clamp state.maxy)
 
   | Right when Wsi.withalt mask ->
-     addnavnorc ();
-     gotoxy state.x (getnav 1)
-  | Left when Wsi.withalt mask ->
-     addnavnorc ();
-     gotoxy state.x (getnav ~-1)
+     let nav = state.nav in
+     (match nav.future with
+     | [] -> ()
+     | next :: frest ->
+        state.nav <-
+          { past = getanchor () :: nav.past
+          ; future = frest
+          };
+        gotoxy state.x (getanchory next)
+     )
+  | Backspace | Left when Wsi.withalt mask ->
+     let nav = state.nav in
+     (match nav.past with
+     | [] -> ()
+     | prev :: prest ->
+        state.nav <-
+          { past = prest
+          ; future = getanchor () :: nav.future
+          };
+        gotoxy state.x (getanchory prev)
+     )
 
   | Ascii 'r' ->
      reload ()

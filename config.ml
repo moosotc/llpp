@@ -297,12 +297,16 @@ type state =
   ; mutable lnava         : (pageno * linkno) option
   ; mutable slideshow     : int
   ; mutable reload        : (x * y * float) option
+  ; mutable nav           : nav
   }
 and hists =
   { pat : string circbuf
   ; pag : string circbuf
-  ; nav : anchor circbuf
   ; sel : string circbuf
+  }
+and nav =
+  { past   : anchor list
+  ; future : anchor list
   }
 ;;
 
@@ -420,8 +424,7 @@ let state =
   ; nameddest     = E.s
   ; geomcmds      = E.s, []
   ; hists         =
-      { nav       = cbnew 10 emptyanchor
-      ; pat       = cbnew 10 E.s
+      { pat       = cbnew 10 E.s
       ; pag       = cbnew 10 E.s
       ; sel       = cbnew 10 E.s
       }
@@ -446,6 +449,10 @@ let state =
   ; lnava         = None
   ; slideshow     = 0
   ; reload        = None
+  ; nav           =
+      { past      = []
+      ; future    = []
+      }
   }
 ;;
 
@@ -1168,7 +1175,6 @@ let load openlast =
     state.x <- px;
     state.origin <- po;
     state.anchor <- pa;
-    cbput state.hists.nav pa;
     true
   in
   load1 f
