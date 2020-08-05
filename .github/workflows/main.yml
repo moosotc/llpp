@@ -1,0 +1,25 @@
+name: main
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: download mupdf
+      run: mkdir build && sh misc/getmupdf.sh build/mupdf
+    - name: Install opengl
+      if: matrix.os == 'ubuntu-latest'
+      run: sudo apt-get install libgl1-mesa-dev
+    - name: build
+      run: bash build.bash build
