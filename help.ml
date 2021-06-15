@@ -32,6 +32,7 @@ primary mouse button    - click on link or select text[2]
   zoom to block         - when in block zoom mode
   otherwise             - pan if there's no text/link under the cursor
 mouse buttons 3/4       - scroll up/down (aka mouse wheel)
+  when Shift is held    - pan left/right
   when Ctrl is held     - zoom
 mouse buttons 5/6       - pan left/right (aka horizontal mouse wheel)
 secondary mouse button  - select rectangle to zoom to

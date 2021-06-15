@@ -4020,7 +4020,7 @@ let canselect () =
 
 let viewmouse button down x y mask =
   match button with
-  | n when (n == 4 || n == 5) && not down ->
+  | n when (n == 4 || n == 5) && not (Wsi.withshift mask) && not down ->
      if Wsi.withctrl mask
      then (
        let incr =
@@ -4057,9 +4057,9 @@ let viewmouse button down x y mask =
             gotoxy !S.x y
      )
 
-  | n when (n = 6 || n = 7) && not down && canpan () ->
+  | n when (n = 4 || n = 5 || n = 6 || n = 7) && not down && canpan () ->
      let x =
-       U.panbound (!S.x + (if n = 7 then -2 else 2) * conf.hscrollstep) in
+       U.panbound (!S.x + (if n = 5 || n = 7 then -2 else 2) * conf.hscrollstep) in
      gotoxy x !S.y
 
   | 1 when Wsi.withshift mask ->
