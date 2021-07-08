@@ -3341,7 +3341,8 @@ let viewkeyboard key mask =
      | [] -> ()
      | l :: _ -> gotoxy !S.x (getpagey l.pageno)
      end
-  | Ascii ' ' -> nextpage ()
+  | Ascii ' ' when not (Wsi.withshift mask) -> nextpage ()
+  | Ascii ' ' when Wsi.withshift mask -> prevpage ()
   | Delete -> prevpage ()
   | Ascii '=' -> showtext ' ' (describe_layout !S.layout);
   | Ascii 'w' ->

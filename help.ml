@@ -5,14 +5,14 @@ Q         - quit without saving the configuration or changes
 W         - save changes
 
 -----Movement-----
-up/down arrow     - scroll up/down
-left/right arrow  - pan left/right (when zoomed in)
-Ctrl-arrows       - half a screen width/height scoll/pan
-space             - go to the next page
-delete            - go to the previous page
-pageup/pagedown   - go forward/backward one screen-full
-g/G               - go to first/last page
-home/end          - go to first/last page
+up/down arrow        - scroll up/down
+left/right arrow     - pan left/right (when zoomed in)
+Ctrl-arrows          - half a screen width/height scoll/pan
+space                - go to the next page
+Shift-space, delete  - go to the previous page
+pageup/pagedown      - go forward/backward one screen-full
+g/G                  - go to first/last page
+home/end             - go to first/last page
 
 -----Advanced Movement / History-----
 backspace             - go back after jumping (clicking link and suchlike)[1]
